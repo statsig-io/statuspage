@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Ping All Sites
     steps:
+    - uses: actions/checkout@v2
     - name: Step 1 Check the site
       id: check_status
       uses: srt32/uptime@master
@@ -24,5 +25,12 @@ jobs:
       run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M')"
     - name: Step 3 Log status
       id: log_status
-      run: echo ${{ steps.date.outputs.date }}, ${{ steps.check_status.outcome }}
+      run: echo ${{ steps.date.outputs.date }}, ${{ steps.check_status.outcome }} >> www_report.log
+    - name: Step 4 Commit Log
+      run: |
+        git config --global user.name 'Vijaye Raji'
+        git config --global user.email 'vijaye@statsig.com'
+        git commit -am 'Status log - automated'
+        git push
+        
     
