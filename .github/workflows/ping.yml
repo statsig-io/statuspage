@@ -1,0 +1,18 @@
+name: Scheduled Ping
+
+# Controls when the action will run. 
+on:
+  schedule:
+  - cron: "*/30 * * * *"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  pinger_job:
+    name: Job that pings
+    runs-on: ubuntu-latest
+    uses: srt32/uptime@master
+      with:
+        url-to-hit: "https://www.statsig.com"
+        expected-statuses: "200,301"
