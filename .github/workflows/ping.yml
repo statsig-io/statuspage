@@ -30,6 +30,7 @@ jobs:
       run: |
         git config --global user.name 'Vijaye Raji'
         git config --global user.email 'vijaye@statsig.com'
+        git add -A
         git commit -am 'Status log - automated'
         git push
         
