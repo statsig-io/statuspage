@@ -13,9 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     name: Ping All Sites
     steps:
-    - name: Check the site
-      id: www
+    - name: Step 1: Check the site
+      id: check_status
       uses: srt32/uptime@master
       with:
         url-to-hit: "https://www.statsig.com"
         expected-statuses: "200,301"
+    - name: Step 2: Log status
+      id: log_status
+      run: echo ${{ step.check_status.outcome }}
+    
