@@ -21,7 +21,7 @@ jobs:
         expected-statuses: "200,301"
     - name: Step 2 Get Date
       id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M')
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M')"
     - name: Step 3 Log status
       id: log_status
       run: echo ${{ steps.date.outputs.date }}, ${{ steps.check_status.outcome }}
