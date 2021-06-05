@@ -3,7 +3,7 @@ name: Scheduled Ping
 # Controls when the action will run. 
 on:
   schedule:
-  - cron: "*/30 * * * *"
+  - cron: "30 * * * *"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
