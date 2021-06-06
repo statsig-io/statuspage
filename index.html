@@ -1,13 +1,65 @@
 <html>
   <head>
     <title>Pinger test</title>
+    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <script>
-      alert('this works');
-    </script>
     <h1>
       Hello World
     </h1>
+    <div id="reports" class="reportContainer">
+    </div>
   </body>
+  <script async>
+    async function genReportLog(container, key) {
+      const response = await fetch(key + '_report.log');
+      const statusLines = await response.text();
+      
+      normalizeData(statusLines);
+    }
+
+    function normalizeData(statusLines) {
+      const rows = statusLines.split('\n');
+      const dateNormalized = splitRowsByDate(rows);
+      console.log(dateNormalized);
+    }
+
+    function splitRowsByDate(rows) {
+      let dateValues = {};
+      for (var ii = 0; ii < rows.length; ii++) {
+        const row = rows[ii];
+        if (!row) {
+          continue;
+        }
+        
+        const [dateTimeStr, resultStr] = row.split(',', 2);
+        const dateTime = new Date(dateTimeStr);
+        const dateStr = dateTime.toDateString();
+
+        let resultArray = dateValues[dateStr];
+        if (!resultArray) {
+          resultArray = { q1: [], q2: [], q3: [], q4: [] };
+          dateValues[dateStr] = resultArray;
+        }
+
+        let result = 0;
+        if (resultStr.trim() == 'success') {
+          result = 1;
+        }
+        const qk = getQuarterKey(dateTime);
+        resultArray[qk].push(result);
+      }
+      return dateValues;
+    }
+
+    function getQuarterKey(dateTime) {
+      const hr = dateTime.getHours();
+      return (
+        hr < 6 ? 'q1' : hr < 12 ? 'q2' : hr < 18 ? 'q3' : 'q4'
+      );
+    }
+    
+    const reportContainer = document.getElementById('reports');
+    genReportLog(reportContainer, 'www');
+  </script>
 </html>
