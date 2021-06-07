@@ -1,7 +1,7 @@
 echo $KEYS
 echo $URLS
 
-for i in "${!KEYS[@]}"; do
+for i in "${!KEYS[@]}";
 do
   key="${KEYS[index]}"
   url="${URLS[index]}"
