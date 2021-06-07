@@ -7,10 +7,6 @@ on:
 
   workflow_dispatch:
 
-env:
-  KEYS: ('www' 'console' 'docs')
-  URLS: ('https://www.statsig.com' 'https://console.statsig.com' 'https://docs.statsig.com')
-
 jobs:
   health_check_job:
     runs-on: ubuntu-latest
@@ -20,5 +16,6 @@ jobs:
     - name: Run Shell Script
       id: shell_script_run
       run: sh ./health-check.sh
-        
-    
+      env:
+        KEYS: ('www' 'console' 'docs')
+        URLS: ('https://www.statsig.com' 'https://console.statsig.com' 'https://docs.statsig.com')
