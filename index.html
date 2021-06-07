@@ -1,13 +1,161 @@
 <html>
   <head>
     <title>Pinger test</title>
+    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <script>
-      alert('this works');
-    </script>
     <h1>
       Hello World
     </h1>
+    <div id="reports" class="reportContainer">
+    </div>
   </body>
+  <script async>
+    const reportsContainer = document.getElementById('reports');
+    async function genReportLog(container, key) {
+      const response = await fetch(key + '_report.log');
+      const statusLines = await response.text();
+      
+      const normalized = normalizeData(statusLines);
+      const statusStream = constructStatusStream(normalized);
+      reportsContainer.appendChild(statusStream);
+    }
+
+    function constructStatusStream(uptimeData) {
+      let container = create('div', 'statusStreamContainer');
+      for (var ii = 89; ii >= 0; ii--) {
+        let line = constructStatusLine(ii, uptimeData[ii]);
+        container.appendChild(line);
+      }
+
+      return container;
+    }
+
+    function constructStatusLine(relDay, quartiles) {
+      let line = create('div', 'statusLine');
+      let date = new Date();
+      date.setDate(date.getDate() - relDay);
+
+      if (quartiles) {
+        for (const [key, val] of Object.entries(quartiles)) {
+          if (key === 'date') { continue; }
+          line.insertBefore(constructStatusSquare(date, key, val), line.firstChild);
+        }
+      } else {
+        for (const key of ['q1', 'q2', 'q3', 'q4']) {
+          line.appendChild(constructStatusSquare(date, key, null));
+        }
+      }
+
+      return line;
+    }
+
+    function constructStatusSquare(date, quartile, uptimeVal) {
+      let square = create('div', 'statusSquare');
+      let color = uptimeVal == null ? 'nodata' : 
+        uptimeVal == 1 ? 'success' :
+        uptimeVal < 0.3 ? 'failure' : 'partial';
+      square.classList.add(color);
+      square.dataset["status"] = color;
+      square.title = getTooltip(date, quartile, color);
+      square.addEventListener('mouseover', showToolTip, false);
+      
+      return square;      
+    }
+
+    function getTooltip(date, quartile, color) {
+      let statusText = color == 'nodata' ? 'No Data Available' :
+        color == 'success' ? 'All operational' :
+        color == 'failure' ? 'Systems experiencing issues' :
+        color == 'partial' ? 'Some systems are experiencing issues' : 'Unknown';
+      
+      return `${date.toDateString()} : ${quartile} : ${statusText}`;
+    }
+
+    function create(tag, className) {
+      let element = document.createElement(tag);
+      element.className = className;
+      return element;
+    }
+
+    function normalizeData(statusLines) {
+      const rows = statusLines.split('\n');
+      const dateNormalized = splitRowsByDate(rows);
+      
+      let relativeDateMap = {};
+      const now = Date.now();
+      for (const [key, val] of Object.entries(dateNormalized)) {
+        const relDays = getRelativeDays(now, new Date(key).getTime());
+        const avgQuartiles = getAverageQuartiles(val);
+        
+        relativeDateMap[relDays] = avgQuartiles;
+      }
+
+      console.log(relativeDateMap);
+      return relativeDateMap;
+    }
+
+    function getAverageQuartiles(quartiles) {
+      let avgMap = {};
+      for (const [key, val] of Object.entries(quartiles)) {
+        if (!val || val.length == 0) {
+          avgMap[key] = null;
+        } else {
+          avgMap[key] = val.reduce((a, v) => a + v) / val.length;
+        }
+      }
+
+      return avgMap;
+    }
+
+    function getAverageValue(arr) {
+      return arr.reduce((a, v) => a + v) / arr.length;
+    }
+
+    function getRelativeDays(date1, date2) { 
+      return Math.floor(Math.abs((date1 - date2) / (24 * 3600 * 1000)));
+    }
+
+    function splitRowsByDate(rows) {
+      let dateValues = {};
+      for (var ii = 0; ii < rows.length; ii++) {
+        const row = rows[ii];
+        if (!row) {
+          continue;
+        }
+
+        const [dateTimeStr, resultStr] = row.split(',', 2);
+        const dateTime = new Date(dateTimeStr);
+        const dateStr = dateTime.toDateString();
+
+        let resultArray = dateValues[dateStr];
+        if (!resultArray) {
+          resultArray = { q1: [], q2: [], q3: [], q4: [] };
+          dateValues[dateStr] = resultArray;
+        }
+
+        let result = 0;
+        if (resultStr.trim() == 'success') {
+          result = 1;
+        }
+        const qk = getQuarterKey(dateTime);
+        resultArray[qk].push(result);
+      }
+      return dateValues;
+    }
+
+    function getQuarterKey(dateTime) {
+      const hr = dateTime.getHours();
+      return (
+        hr < 6 ? 'q1' : hr < 12 ? 'q2' : hr < 18 ? 'q3' : 'q4'
+      );
+    }
+
+    function showToolTip(event) {
+      
+    }
+    
+    const reportContainer = document.getElementById('reports');
+    genReportLog(reportContainer, 'www');
+  </script>
 </html>
