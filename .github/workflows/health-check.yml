@@ -16,7 +16,6 @@ jobs:
     - name: Run Shell Script
       id: shell_script_run
       env:
-        COUNT: 3
-        KEYS: ('www' 'console' 'docs')
-        URLS: ('https://www.statsig.com' 'https://console.statsig.com' 'https://docs.statsig.com')
+        KEYS: 'www console docs'
+        URLS: 'https://www.statsig.com https://console.statsig.com https://docs.statsig.com'
       run: bash ./health-check.sh
