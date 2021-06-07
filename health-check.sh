@@ -23,7 +23,7 @@ do
     sleep 5
   done
   dateTime=$(date +'%Y-%m-%d %H:%M')
-  echo $dateTime, $result >> $key"_report.log"
+  echo $dateTime, $result >> "${key}_report.log"
 done
 
 git config --global user.name 'Vijaye Raji'
