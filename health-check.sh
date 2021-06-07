@@ -1,11 +1,7 @@
-keys=('www' 'console' 'docs')
-urls=('https://www.statsig.com' 'https://console.statsig.com' 'https://docs.statsig.com')
-
-
-for index in "${!keys[@]}";
+for index in "${!KEYS[@]}";
 do
-  key="${keys[index]}"
-  url="${urls[index]}"
+  key="${KEYS[index]}"
+  url="${URLS[index]}"
 
   echo $key
   echo $url
@@ -26,3 +22,10 @@ do
   dateTime=$(date +'%Y-%m-%d %H:%M')
   echo $dateTime, $result >> $key"_report.log"
 done
+
+git config --global user.name 'Vijaye Raji'
+git config --global user.email 'vijaye@statsig.com'
+git add -A
+git commit -am 'Status logs - automated'
+git push
+
