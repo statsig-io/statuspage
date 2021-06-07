@@ -1,4 +1,4 @@
-for index in "${!KEYS[@]}";
+for ((index = 1; index <= $#KEYS; index++));
 do
   key="${KEYS[index]}"
   url="${URLS[index]}"
