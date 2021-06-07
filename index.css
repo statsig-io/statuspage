@@ -97,7 +97,7 @@ button {
 
 .reportContainer {
   background-color: #f8f8f8;
-  width: 1024px;
+  width: 900px;
   margin: 120px auto;
 }
 
@@ -108,7 +108,7 @@ button {
 
 .statusLine {
   display: flex;
-  min-height: 50px;
+  min-height: 36px;
   flex-direction: column;
   justify-content: space-between;
   min-width: 8px;
@@ -117,6 +117,8 @@ button {
 .statusSquare {
   min-width: 8px;
   height: 8px;
+  margin: 1px;
+  border: 1px solid #fff;
 }
 
 .success {
