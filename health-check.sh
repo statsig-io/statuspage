@@ -1,3 +1,6 @@
+echo $KEYS
+echo $URLS
+
 for ((index = 1; index <= $#KEYS; index++));
 do
   key="${KEYS[index]}"
