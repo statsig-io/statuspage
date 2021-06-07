@@ -1,0 +1,3 @@
+www=https://www.statsig.com
+console=https://console.statsig.com
+docs=https://docs.statsig.com

@@ -15,7 +15,4 @@ jobs:
     - uses: actions/checkout@v2
     - name: Run Shell Script
       id: shell_script_run
-      env:
-        KEYS: 'www console docs'
-        URLS: 'https://www.statsig.com https://console.statsig.com https://docs.statsig.com'
       run: bash ./health-check.sh
