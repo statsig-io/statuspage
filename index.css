@@ -96,6 +96,41 @@ button {
 }
 
 .reportContainer {
+  background-color: #f8f8f8;
   width: 1024px;
   margin: 120px auto;
+}
+
+.statusStreamContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.statusLine {
+  display: flex;
+  min-height: 50px;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 8px;
+}
+
+.statusSquare {
+  min-width: 8px;
+  height: 8px;
+}
+
+.success {
+  background-color: #00c29c;
+}
+
+.failure {
+  background-color: #e75d33;
+}
+
+.nodata {
+  background-color: transparent;
+}
+
+.partial {
+  background-color: #e2c51c;
 }

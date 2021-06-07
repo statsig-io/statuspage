@@ -11,17 +11,97 @@
     </div>
   </body>
   <script async>
+    const reportsContainer = document.getElementById('reports');
     async function genReportLog(container, key) {
       const response = await fetch(key + '_report.log');
       const statusLines = await response.text();
       
-      normalizeData(statusLines);
+      const normalized = normalizeData(statusLines);
+      const statusStream = constructStatusStream(normalized);
+      reportsContainer.appendChild(statusStream);
+    }
+
+    function constructStatusStream(uptimeData) {
+      let container = create('div', 'statusStreamContainer');
+      for (var ii = 89; ii >= 0; ii--) {
+        let line = constructStatusLine(uptimeData[ii]);
+        container.appendChild(line);
+      }
+
+      return container;
+    }
+
+    function constructStatusLine(quartiles) {
+      let line = create('div', 'statusLine');
+      if (quartiles) {
+        for (const [key, val] of Object.entries(quartiles)) {
+          line.appendChild(constructStatusSquare(val));
+        }
+      } else {
+        line.appendChild(constructStatusSquare(null));
+        line.appendChild(constructStatusSquare(null));
+        line.appendChild(constructStatusSquare(null));
+        line.appendChild(constructStatusSquare(null));
+      }
+
+      return line;
+    }
+
+    function constructStatusSquare(uptimeVal) {
+      let square = create('div', 'statusSquare');
+      let color = uptimeVal == null ? 'nodata' : 
+        uptimeVal == 1 ? 'success' :
+        uptimeVal < 0.3 ? 'failure' : 'partial';
+      square.classList.add(color);
+      let ss = document.createElement('div');
+      ss.dataset["status"] = color;
+      ss.addEventListener('hover', showToolTip);
+      
+      return square;      
+    }
+
+    function create(tag, className) {
+      let element = document.createElement(tag);
+      element.className = className;
+      return element;
     }
 
     function normalizeData(statusLines) {
       const rows = statusLines.split('\n');
       const dateNormalized = splitRowsByDate(rows);
-      console.log(dateNormalized);
+      
+      let relativeDateMap = {};
+      const now = Date.now();
+      for (const [key, val] of Object.entries(dateNormalized)) {
+        const relDays = getRelativeDays(now, new Date(key).getTime());
+        const avgQuartiles = getAverageQuartiles(val);
+
+        relativeDateMap[relDays] = avgQuartiles;
+      }
+
+      console.log(relativeDateMap);
+      return relativeDateMap;
+    }
+
+    function getAverageQuartiles(quartiles) {
+      let avgMap = {};
+      for (const [key, val] of Object.entries(quartiles)) {
+        if (!val || val.length == 0) {
+          avgMap[key] = null;
+        } else {
+          avgMap[key] = val.reduce((a, v) => a + v) / val.length;
+        }
+      }
+
+      return avgMap;
+    }
+
+    function getAverageValue(arr) {
+      return arr.reduce((a, v) => a + v) / arr.length;
+    }
+
+    function getRelativeDays(date1, date2) { 
+      return Math.floor(Math.abs((date1 - date2) / (24 * 3600 * 1000)));
     }
 
     function splitRowsByDate(rows) {
@@ -31,7 +111,7 @@
         if (!row) {
           continue;
         }
-        
+
         const [dateTimeStr, resultStr] = row.split(',', 2);
         const dateTime = new Date(dateTimeStr);
         const dateStr = dateTime.toDateString();
@@ -57,6 +137,10 @@
       return (
         hr < 6 ? 'q1' : hr < 12 ? 'q2' : hr < 18 ? 'q3' : 'q4'
       );
+    }
+
+    function showToolTip(event) {
+      console.log(event);
     }
     
     const reportContainer = document.getElementById('reports');
