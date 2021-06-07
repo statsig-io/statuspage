@@ -1,0 +1,24 @@
+name: Scheduled Health Check
+
+# Controls when the action will run. 
+on:
+  schedule:
+  - cron: "30 * * * *"
+
+  workflow_dispatch:
+
+env:
+  KEYS: ('www' 'console' 'docs')
+  URLS: ('https://www.statsig.com' 'https://console.statsig.com' 'https://docs.statsig.com')
+
+jobs:
+  health_check_job:
+    runs-on: ubuntu-latest
+    name: Check all sites
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Shell Script
+      id: shell_script_run
+      run: sh /health-check.sh
+        
+    

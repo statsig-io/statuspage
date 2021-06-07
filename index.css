@@ -15,7 +15,7 @@ body {
     "Helvetica Neue", "Ubuntu", sans-serif;
   justify-content: center;
   line-height: 26px;
-  margin: 0;
+  margin: 60px 0;
   padding: 0;
   text-align: center;
   transition: opacity 0.3s;
@@ -96,7 +96,7 @@ button {
 }
 
 .reportContainer {
-  background-color: #f8f8f8;
+  background-color: #e8e8e8;
   width: 900px;
   margin: 120px auto;
 }
@@ -112,6 +112,7 @@ button {
   flex-direction: column;
   justify-content: space-between;
   min-width: 8px;
+  width: 100%;
 }
 
 .statusSquare {
