@@ -1,11 +1,24 @@
-KEYSARRAY=( $KEYS )
-URLSARRAY=( $URLS )
+KEYSARRAY=()
+URLSARRAY=()
+
+urlsConfig="./urls-config.txt"
+while read -r line
+do
+  echo "$line"
+  IFS='=' read -ra TOKENS <<< "$line"
+  echo $TOKENS
+
+  KEYSARRAY+=(${TOKENS[0]})
+  URLSARRAY+=(${TOKENS[1]})
+done < "$urlsConfig"
 
 
+echo "***********************"
 echo $KEYSARRAY
 echo $URLSARRAY
 echo ${#KEYSARRAY[@]}
 echo "***********************"
+
 
 for (( index=0; index < ${#KEYSARRAY[@]}; index++))
 do
