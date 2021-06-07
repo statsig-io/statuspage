@@ -18,4 +18,4 @@ jobs:
       env:
         KEYS: ('www' 'console' 'docs')
         URLS: ('https://www.statsig.com' 'https://console.statsig.com' 'https://docs.statsig.com')
-      run: sh ./health-check.sh
+      run: bash ./health-check.sh
