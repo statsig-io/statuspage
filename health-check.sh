@@ -9,8 +9,8 @@ echo "***********************"
 
 for (( index=0; index < ${#KEYSARRAY[@]}; index++))
 do
-  key="${KEYS[index]}"
-  url="${URLS[index]}"
+  key="${KEYSARRAY[index]}"
+  url="${URLSARRAY[index]}"
 
   echo $key
   echo $url
