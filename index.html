@@ -5,12 +5,26 @@
   </head>
   <body>
     <h1>
-      Hello World
+      Statsig Status
     </h1>
     <div id="reports" class="reportContainer">
     </div>
+    <div id="templates" style="display: none;">
+      <div 
+        id="statusSquareTemplate" 
+        class="statusSquare $color"
+        data-status="$color"
+        title="$tooltip"
+        onmouseover="showTooltip(event)">
+      </div>
+      <div id="statusStreamContainerTemplate" class="statusStreamContainer">
+      </div>
+      <div id="statusLineTemplate" class="statusLine">
+      </div>
+    </div>
   </body>
   <script async>
+    const maxDays = 30;
     const reportsContainer = document.getElementById('reports');
     async function genReportLog(container, key) {
       const response = await fetch(key + '_report.log');
@@ -22,8 +36,8 @@
     }
 
     function constructStatusStream(uptimeData) {
-      let container = create('div', 'statusStreamContainer');
-      for (var ii = 89; ii >= 0; ii--) {
+      let container = templatize('statusStreamContainerTemplate');
+      for (var ii = maxDays - 1; ii >= 0; ii--) {
         let line = constructStatusLine(ii, uptimeData[ii]);
         container.appendChild(line);
       }
@@ -32,7 +46,7 @@
     }
 
     function constructStatusLine(relDay, quartiles) {
-      let line = create('div', 'statusLine');
+      let line = templatize('statusLineTemplate')
       let date = new Date();
       date.setDate(date.getDate() - relDay);
 
@@ -51,16 +65,36 @@
     }
 
     function constructStatusSquare(date, quartile, uptimeVal) {
-      let square = create('div', 'statusSquare');
       let color = uptimeVal == null ? 'nodata' : 
         uptimeVal == 1 ? 'success' :
         uptimeVal < 0.3 ? 'failure' : 'partial';
-      square.classList.add(color);
-      square.dataset["status"] = color;
-      square.title = getTooltip(date, quartile, color);
-      square.addEventListener('mouseover', showToolTip, false);
-      
+      let square = templatize('statusSquareTemplate', {
+        color: color,
+        tooltip: getTooltip(date, quartile, color),
+      });
       return square;      
+    }
+
+    function templatize(templateId, parameters) {
+      let clone = document.getElementById(templateId).cloneNode(true);
+      if (!parameters) {
+        return clone;
+      }
+      
+      const attributes = clone.getAttributeNames();
+      for (var ii = 0; ii < attributes.length; ii++) {
+        const attr = attributes[ii];
+        const attrVal = clone.getAttribute(attr);
+        clone.setAttribute(attr, templatizeString(attrVal, parameters))
+      }
+      return clone;
+    }
+
+    function templatizeString(text, parameters) {
+      for (const [key, val] of Object.entries(parameters)) {
+        text = text.replaceAll('$' + key, val);
+      }
+      return text;
     }
 
     function getTooltip(date, quartile, color) {
@@ -151,7 +185,7 @@
       );
     }
 
-    function showToolTip(event) {
+    function showTooltip(event) {
       
     }
     
