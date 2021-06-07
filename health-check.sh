@@ -1,7 +1,13 @@
-echo $KEYS
-echo $URLS
+KEYSARRAY=( $KEYS )
+URLSARRAY=( $URLS )
 
-for index in "${!KEYS[@]}";
+
+echo $KEYSARRAY
+echo $URLSARRAY
+echo ${#KEYSARRAY[@]}
+echo "***********************"
+
+for (( index=0; index < ${#KEYSARRAY[@]}; index++))
 do
   key="${KEYS[index]}"
   url="${URLS[index]}"
