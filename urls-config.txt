@@ -1,3 +1,4 @@
 www=https://www.statsig.com
+api=https://api.statsig.com/health
 console=https://console.statsig.com
 docs=https://docs.statsig.com

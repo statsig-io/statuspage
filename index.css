@@ -8,13 +8,14 @@ html {
   flex-direction: column;
 }
 body {
+  background-color: #ebebeb;
   color: #3b3b3b;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 300;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Helvetica Neue", "Ubuntu", sans-serif;
   justify-content: center;
-  line-height: 26px;
+  line-height: 22px;
   margin: 60px 0;
   padding: 0;
   text-align: center;
@@ -96,14 +97,23 @@ button {
 }
 
 .reportContainer {
-  background-color: #e8e8e8;
   width: 900px;
   margin: 120px auto;
 }
 
+.statusContainer {
+  margin-top: 60px;
+  text-align: left;
+}
+
 .statusStreamContainer {
+  background-color: #f8f8f8;
   display: flex;
   justify-content: space-between;
+}
+
+.statusStreamContainer + .statusStreamContainer {
+  margin-top: 40px;
 }
 
 .statusLine {
@@ -119,7 +129,7 @@ button {
   min-width: 8px;
   height: 8px;
   margin: 1px;
-  border: 1px solid #fff;
+  border: 1px solid #d8d8d8;
 }
 
 .success {
