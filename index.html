@@ -185,7 +185,7 @@
         }
 
         const [dateTimeStr, resultStr] = row.split(',', 2);
-        const dateTime = new Date(dateTimeStr);
+        const dateTime = new Date(dateTimeStr.replace(/-/g, '/'));
         const dateStr = dateTime.toDateString();
 
         let resultArray = dateValues[dateStr];
