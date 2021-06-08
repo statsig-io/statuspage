@@ -105,12 +105,12 @@
 
       if (node.childElementCount == 0) {
         node.innerText = templatizeString(node.innerText, parameters);
+      } else {
+        const children = Array.from(node.children);
+        children.forEach((n) => {
+          applyTemplateSubstitutions(n, parameters);
+        })
       }
-
-      const children = Array.from(node.children);
-      children.forEach((n) => {
-        applyTemplateSubstitutions(n, parameters);
-      })
     }
 
     function templatizeString(text, parameters) {
