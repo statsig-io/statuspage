@@ -33,7 +33,7 @@
     const maxDays = 30;
     const reportsContainer = document.getElementById('reports');
     async function genReportLog(container, key, url) {
-      const response = await fetch(key + '_report.log');
+      const response = await fetch('/' + key + '_report.log');
       const statusLines = await response.text();
       
       const normalized = normalizeData(statusLines);
@@ -216,7 +216,7 @@
     }
     
     async function genAllReports() {
-      const response = await fetch('urls-config.txt');
+      const response = await fetch('/urls-config.txt');
       const configText = await response.text();
       const configLines = configText.split('\n');
       for (let ii = 0; ii < configLines.length; ii++) {
