@@ -17,93 +17,118 @@
         title="$tooltip"
         onmouseover="showTooltip(event)">
       </div>
+      <div id="statusLineTemplate" class="statusLine">
+      </div>
       <div id="statusStreamContainerTemplate" class="statusStreamContainer">
       </div>
-      <div id="statusLineTemplate" class="statusLine">
+      <div id="statusContainerTemplate" class="statusContainer">
+        <h4>$title</h4>
+        <div>
+          (<a href="$url">$url</a>)
+        </div>
       </div>
     </div>
   </body>
   <script async>
     const maxDays = 30;
     const reportsContainer = document.getElementById('reports');
-    async function genReportLog(container, key) {
+    async function genReportLog(container, key, url) {
       const response = await fetch(key + '_report.log');
       const statusLines = await response.text();
       
       const normalized = normalizeData(statusLines);
-      const statusStream = constructStatusStream(normalized);
+      const statusStream = constructStatusStream(key, url, normalized);
       reportsContainer.appendChild(statusStream);
     }
 
-    function constructStatusStream(uptimeData) {
-      let container = templatize('statusStreamContainerTemplate');
+    function constructStatusStream(key, url, uptimeData) {
+      let container = templatize('statusContainerTemplate', { title: key, url: url });
+      let streamContainer = templatize('statusStreamContainerTemplate');
       for (var ii = maxDays - 1; ii >= 0; ii--) {
-        let line = constructStatusLine(ii, uptimeData[ii]);
-        container.appendChild(line);
+        let line = constructStatusLine(key, ii, uptimeData[ii]);
+        streamContainer.appendChild(line);
       }
 
+      container.appendChild(streamContainer);
       return container;
     }
 
-    function constructStatusLine(relDay, quartiles) {
+    function constructStatusLine(key, relDay, quartiles) {
       let line = templatize('statusLineTemplate')
       let date = new Date();
       date.setDate(date.getDate() - relDay);
 
       if (quartiles) {
-        for (const [key, val] of Object.entries(quartiles)) {
-          if (key === 'date') { continue; }
-          line.insertBefore(constructStatusSquare(date, key, val), line.firstChild);
+        for (const [quartile, val] of Object.entries(quartiles)) {
+          if (quartile === 'date') { continue; }
+          line.insertBefore(constructStatusSquare(key, date, quartile, val), line.firstChild);
         }
       } else {
-        for (const key of ['q1', 'q2', 'q3', 'q4']) {
-          line.appendChild(constructStatusSquare(date, key, null));
+        for (const quartile of ['q1', 'q2', 'q3', 'q4']) {
+          line.appendChild(constructStatusSquare(key, date, quartile, null));
         }
       }
 
       return line;
     }
 
-    function constructStatusSquare(date, quartile, uptimeVal) {
+    function constructStatusSquare(key, date, quartile, uptimeVal) {
       let color = uptimeVal == null ? 'nodata' : 
         uptimeVal == 1 ? 'success' :
         uptimeVal < 0.3 ? 'failure' : 'partial';
       let square = templatize('statusSquareTemplate', {
         color: color,
-        tooltip: getTooltip(date, quartile, color),
+        tooltip: getTooltip(key, date, quartile, color),
       });
       return square;      
     }
 
+    let cloneId = 0;
     function templatize(templateId, parameters) {
       let clone = document.getElementById(templateId).cloneNode(true);
+      clone.id = 'template_clone_' + cloneId++;
       if (!parameters) {
         return clone;
       }
-      
-      const attributes = clone.getAttributeNames();
-      for (var ii = 0; ii < attributes.length; ii++) {
-        const attr = attributes[ii];
-        const attrVal = clone.getAttribute(attr);
-        clone.setAttribute(attr, templatizeString(attrVal, parameters))
-      }
+
+      applyTemplateSubstitutions(clone, parameters);      
       return clone;
     }
 
+    function applyTemplateSubstitutions(node, parameters) {
+      const attributes = node.getAttributeNames();
+      for (var ii = 0; ii < attributes.length; ii++) {
+        const attr = attributes[ii];
+        const attrVal = node.getAttribute(attr);
+        node.setAttribute(attr, templatizeString(attrVal, parameters))
+      }
+
+      if (node.childElementCount == 0) {
+        node.innerText = templatizeString(node.innerText, parameters);
+      }
+
+      const children = Array.from(node.children);
+      children.forEach((n) => {
+        applyTemplateSubstitutions(n, parameters);
+      })
+    }
+
     function templatizeString(text, parameters) {
-      for (const [key, val] of Object.entries(parameters)) {
-        text = text.replaceAll('$' + key, val);
+      if (parameters) {
+        for (const [key, val] of Object.entries(parameters)) {
+          text = text.replaceAll('$' + key, val);
+        }
       }
       return text;
     }
 
-    function getTooltip(date, quartile, color) {
+    function getTooltip(key, date, quartile, color) {
       let statusText = color == 'nodata' ? 'No Data Available' :
         color == 'success' ? 'All operational' :
         color == 'failure' ? 'Systems experiencing issues' :
         color == 'partial' ? 'Some systems are experiencing issues' : 'Unknown';
       
-      return `${date.toDateString()} : ${quartile} : ${statusText}`;
+      return `${key} | ${date.toDateString()} : ${quartile} : ${statusText}`;
     }
 
     function create(tag, className) {
@@ -115,6 +140,7 @@
     function normalizeData(statusLines) {
       const rows = statusLines.split('\n');
       const dateNormalized = splitRowsByDate(rows);
+      console.dir(dateNormalized);
       
       let relativeDateMap = {};
       const now = Date.now();
@@ -125,7 +151,7 @@
         relativeDateMap[relDays] = avgQuartiles;
       }
 
-      console.log(relativeDateMap);
+      console.dir(relativeDateMap);
       return relativeDateMap;
     }
 
@@ -189,7 +215,22 @@
       
     }
     
+    async function genAllReports() {
+      const response = await fetch('urls-config.txt');
+      const configText = await response.text();
+      const configLines = configText.split('\n');
+      for (let ii = 0; ii < configLines.length; ii++) {
+        const configLine = configLines[ii];
+        const [key, url] = configLine.split('=');
+        if (!key || !url) {
+          continue;
+        }
+
+        await genReportLog(reportContainer, key, url);
+      }
+    }
+
     const reportContainer = document.getElementById('reports');
-    genReportLog(reportContainer, 'www');
+    genAllReports();
   </script>
 </html>
