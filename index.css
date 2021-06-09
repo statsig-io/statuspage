@@ -98,7 +98,7 @@ button {
 
 footer {
   color: #e8e8e8;
-  margin-top: 40px;
+  margin: 40px;
 }
 
 footer a {
@@ -109,10 +109,10 @@ footer a {
 .pageContainer {
   padding: 40px 20px;
   background-color: #fff;
-  border-radius: 8px;
+  border-radius: 2px;
   max-width: 800px;
   width: 100%;
-  margin: 40px auto;
+  margin: auto;
 }
 
 .titleSeparator {
