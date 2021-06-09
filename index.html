@@ -1,34 +1,46 @@
 <html>
   <head>
-    <title>Pinger test</title>
+    <title>Statsig Status</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <h1>
-      Statsig Status
-    </h1>
-    <div id="reports" class="reportContainer">
-    </div>
-    <div id="templates" style="display: none;">
-      <div 
-        id="statusSquareTemplate" 
-        class="statusSquare $color"
-        data-status="$color"
-        title="$tooltip"
-        onmouseover="showTooltip(event)">
+    <div class="pageContainer">
+      <h1>
+        Statsig Status
+      </h1>
+      <hr class="titleSeparator" />
+      <div id="reports" class="reportContainer">
       </div>
-      <div id="statusLineTemplate" class="statusLine">
-      </div>
-      <div id="statusStreamContainerTemplate" class="statusStreamContainer">
-      </div>
-      <div id="statusContainerTemplate" class="statusContainer">
-        <h4>$title</h4>
-        <div>
-          (<a href="$url">$url</a>)
+      <div id="templates" style="display: none;">
+        <div 
+          id="statusSquareTemplate" 
+          class="statusSquare $color"
+          data-status="$color"
+          title="$tooltip"
+          onmouseover="showTooltip(event)">
+        </div>
+        <div id="statusLineTemplate" class="statusLine">
+        </div>
+        <div id="statusStreamContainerTemplate" class="statusStreamContainer">
+        </div>
+        <div id="statusContainerTemplate" class="statusContainer">
+          <h4><span>$title </span><span class="$color statusHeadline">$status</span></h4>
+          <div class="sectionUrl">
+            (<a href="$url">$url</a>)
+          </div>
+        </div>
+        <div id="uptimeTemplate" class="uptimeContainer">
+          <span><b>Uptime:&nbsp;</b></span>
+          <span>$upTime</span>
+          <hr />
         </div>
       </div>
     </div>
+    <footer>
+      Powered by Statsig Open Source Library: 
+      <a href="https://github.com/statsig-io/pinger/">https://github.com/statsig-io/pinger</a>
+    </footer>
   </body>
   <script async>
     const maxDays = 30;
@@ -43,14 +55,25 @@
     }
 
     function constructStatusStream(key, url, uptimeData) {
-      let container = templatize('statusContainerTemplate', { title: key, url: url });
       let streamContainer = templatize('statusStreamContainerTemplate');
       for (var ii = maxDays - 1; ii >= 0; ii--) {
         let line = constructStatusLine(key, ii, uptimeData[ii]);
         streamContainer.appendChild(line);
       }
 
+      const lastSet = uptimeData[0];
+      const lastQuartile = lastSet.q4 ?? (lastSet.q3 ?? (lastSet.q2 ?? lastSet.q1));
+      const color = getColor(lastQuartile);
+
+      const container = templatize('statusContainerTemplate', { 
+        title: key, 
+        url: url, 
+        color: color, 
+        status: getStatusText(color),
+      });
+      
       container.appendChild(streamContainer);
+      container.appendChild(templatize('uptimeTemplate', { upTime: uptimeData.upTime }));
       return container;
     }
 
@@ -73,10 +96,14 @@
       return line;
     }
 
-    function constructStatusSquare(key, date, quartile, uptimeVal) {
-      let color = uptimeVal == null ? 'nodata' : 
+    function getColor(uptimeVal) {
+      return uptimeVal == null ? 'nodata' : 
         uptimeVal == 1 ? 'success' :
         uptimeVal < 0.3 ? 'failure' : 'partial';
+    }
+
+    function constructStatusSquare(key, date, quartile, uptimeVal) {
+      const color = getColor(uptimeVal);
       let square = templatize('statusSquareTemplate', {
         color: color,
         tooltip: getTooltip(key, date, quartile, color),
@@ -123,12 +150,15 @@
       return text;
     }
 
-    function getTooltip(key, date, quartile, color) {
-      let statusText = color == 'nodata' ? 'No Data Available' :
+    function getStatusText(color) {
+      return color == 'nodata' ? 'No Data Available' :
         color == 'success' ? 'All operational' :
         color == 'failure' ? 'Systems experiencing issues' :
         color == 'partial' ? 'Some systems are experiencing issues' : 'Unknown';
-      
+    }
+
+    function getTooltip(key, date, quartile, color) {
+      let statusText = getStatusText(color);      
       return `${key} | ${date.toDateString()} : ${quartile} : ${statusText}`;
     }
 
@@ -141,18 +171,21 @@
     function normalizeData(statusLines) {
       const rows = statusLines.split('\n');
       const dateNormalized = splitRowsByDate(rows);
-      console.dir(dateNormalized);
       
       let relativeDateMap = {};
       const now = Date.now();
       for (const [key, val] of Object.entries(dateNormalized)) {
+        if (key == 'upTime') {
+          continue;
+        }
+
         const relDays = getRelativeDays(now, new Date(key).getTime());
         const avgQuartiles = getAverageQuartiles(val);
         
         relativeDateMap[relDays] = avgQuartiles;
       }
 
-      console.dir(relativeDateMap);
+      relativeDateMap.upTime = dateNormalized.upTime;
       return relativeDateMap;
     }
 
@@ -179,6 +212,7 @@
 
     function splitRowsByDate(rows) {
       let dateValues = {};
+      let sum = 0, count = 0;
       for (var ii = 0; ii < rows.length; ii++) {
         const row = rows[ii];
         if (!row) {
@@ -199,9 +233,15 @@
         if (resultStr.trim() == 'success') {
           result = 1;
         }
+        sum += result;
+        count++;
+
         const qk = getQuarterKey(dateTime);
         resultArray[qk].push(result);
       }
+
+      const upTime = (sum / count * 100).toFixed(2) + "%";
+      dateValues.upTime = upTime;
       return dateValues;
     }
 
