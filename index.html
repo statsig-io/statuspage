@@ -6,30 +6,42 @@
     <script src="/index.js"></script>
   </head>
   <body>
-    <h1>
-      Statsig Status
-    </h1>
-    <div id="reports" class="reportContainer">
-    </div>
-    <div id="templates" style="display: none;">
-      <div 
-        id="statusSquareTemplate" 
-        class="statusSquare $color"
-        data-status="$color"
-        title="$tooltip"
-        onmouseover="showTooltip(event)">
+    <div class="pageContainer">
+      <h1>
+        Statsig Status
+      </h1>
+      <hr class="titleSeparator" />
+      <div id="reports" class="reportContainer">
       </div>
-      <div id="statusLineTemplate" class="statusLine">
-      </div>
-      <div id="statusStreamContainerTemplate" class="statusStreamContainer">
-      </div>
-      <div id="statusContainerTemplate" class="statusContainer">
-        <h4>$title</h4>
-        <div>
-          (<a href="$url">$url</a>)
+      <div id="templates" style="display: none;">
+        <div 
+          id="statusSquareTemplate" 
+          class="statusSquare $color"
+          data-status="$color"
+          title="$tooltip"
+          onmouseover="showTooltip(event)">
+        </div>
+        <div id="statusLineTemplate" class="statusLine">
+        </div>
+        <div id="statusStreamContainerTemplate" class="statusStreamContainer">
+        </div>
+        <div id="statusContainerTemplate" class="statusContainer">
+          <h4><span>$title </span><span class="$color statusHeadline">$status</span></h4>
+          <div class="sectionUrl">
+            (<a href="$url">$url</a>)
+          </div>
+        </div>
+        <div id="uptimeTemplate" class="uptimeContainer">
+          <span><b>Uptime:&nbsp;</b></span>
+          <span>$upTime</span>
+          <hr />
         </div>
       </div>
     </div>
+    <footer>
+      Powered by Statsig Open Source Library: 
+      <a href="https://github.com/statsig-io/pinger/">https://github.com/statsig-io/pinger</a>
+    </footer>
   </body>
   <script>
     genAllReports();
