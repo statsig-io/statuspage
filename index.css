@@ -15,7 +15,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Helvetica Neue", "Ubuntu", sans-serif;
   justify-content: center;
-  line-height: 22px;
+  line-height: 24px;
   margin: 0;
   padding: 0;
   text-align: center;
@@ -40,13 +40,13 @@ textarea,
 
 h1 {
   color: #3b3b3b;
-  font-size: 40px;
+  font-size: 32px;
   font-weight: bold;
   margin: 0px;
 }
 h2 {
   color: #3b3b3b;
-  font-size: 30px;
+  font-size: 28px;
   font-weight: bold;
   margin: 16px 0 8px 0;
 }
@@ -137,7 +137,6 @@ footer a {
 }
 
 .statusStreamContainer {
-  background-color: #f8f8f8;
   display: flex;
   justify-content: space-between;
 }
@@ -186,16 +185,54 @@ footer a {
 
 .success {
   background-color: #00c29c;
+  color: #fff;
 }
 
 .failure {
   background-color: #e75d33;
+  color: #fff;
 }
 
 .nodata {
-  background-color: transparent;
+  background-color: #f8f8f8;
+  color: #ccc;
 }
 
 .partial {
   background-color: #e2c51c;
+  color: #fff;
+}
+
+.tooltip {
+  background-color: #194b7dee;
+  box-shadow: 0 0 8px 0 #33333366;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 12px;
+  padding: 8px;
+  position: absolute;
+  text-align: left;
+  z-index: 100;
+  width: 240px;
+  transition: opacity 0.2s;
+}
+
+.tooltip .tooltipArrow {
+  position: absolute;
+  bottom: 100%;
+  width: 4px;
+  text-align: center;
+  border: 4px solid transparent;
+  border-bottom-color: #194b7d;
+  left: 50%;
+  margin-left: -2px;
+}
+
+.tooltip .tooltipDateTime {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.tooltip .tooltipQuartile {
+  font-size: 10px;
 }

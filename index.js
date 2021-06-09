@@ -6,18 +6,29 @@ async function genReportLog(container, key, url) {
   
   const normalized = normalizeData(statusLines);
   const statusStream = constructStatusStream(key, url, normalized);
-  document.getElementById('reports').appendChild(statusStream);
+  container.appendChild(statusStream);
 }
 
 function constructStatusStream(key, url, uptimeData) {
-  let container = templatize('statusContainerTemplate', { title: key, url: url });
   let streamContainer = templatize('statusStreamContainerTemplate');
   for (var ii = maxDays - 1; ii >= 0; ii--) {
     let line = constructStatusLine(key, ii, uptimeData[ii]);
     streamContainer.appendChild(line);
   }
 
+  const lastSet = uptimeData[0];
+  const lastQuartile = lastSet.q4 ?? (lastSet.q3 ?? (lastSet.q2 ?? lastSet.q1));
+  const color = getColor(lastQuartile);
+  
+  const container = templatize('statusContainerTemplate', { 
+    title: key, 
+    url: url, 
+    color: color, 
+    status: getStatusText(color),
+  });
+  
   container.appendChild(streamContainer);
+  container.appendChild(templatize('uptimeTemplate', { upTime: uptimeData.upTime }));
   return container;
 }
 
@@ -40,14 +51,25 @@ function constructStatusLine(key, relDay, quartiles) {
   return line;
 }
 
-function constructStatusSquare(key, date, quartile, uptimeVal) {
-  let color = uptimeVal == null ? 'nodata' : 
+function getColor(uptimeVal) {
+  return uptimeVal == null ? 'nodata' : 
     uptimeVal == 1 ? 'success' :
     uptimeVal < 0.3 ? 'failure' : 'partial';
+}
+
+function constructStatusSquare(key, date, quartile, uptimeVal) {
+  const color = getColor(uptimeVal);
   let square = templatize('statusSquareTemplate', {
     color: color,
     tooltip: getTooltip(key, date, quartile, color),
   });
+
+  const show = () => {
+    showTooltip(square, key, date, quartile, color);
+  };
+  square.addEventListener('mouseover', show);
+  square.addEventListener('mousedown', show);
+  square.addEventListener('mouseout', hideTooltip);
   return square;      
 }
 
@@ -90,12 +112,22 @@ function templatizeString(text, parameters) {
   return text;
 }
 
-function getTooltip(key, date, quartile, color) {
-  let statusText = color == 'nodata' ? 'No Data Available' :
+function getStatusText(color) {
+  return color == 'nodata' ? 'No Data Available' :
     color == 'success' ? 'All operational' :
-    color == 'failure' ? 'Systems experiencing issues' :
-    color == 'partial' ? 'Some systems are experiencing issues' : 'Unknown';
-  
+    color == 'failure' ? 'Issues Detected' :
+    color == 'partial' ? 'Partial Outage' : 'Unknown';
+}
+
+function getStatusDescriptiveText(color) {
+  return color == 'nodata' ? 'No Data Available: Health check was not performed.' :
+    color == 'success' ? 'All systems 100% operational.' :
+    color == 'failure' ? 'The system was down as seen from health-checker during this period.' :
+    color == 'partial' ? 'There were some periods of instability in the service.' : 'Unknown';
+}
+
+function getTooltip(key, date, quartile, color) {
+  let statusText = getStatusText(color);      
   return `${key} | ${date.toDateString()} : ${quartile} : ${statusText}`;
 }
 
@@ -108,18 +140,21 @@ function create(tag, className) {
 function normalizeData(statusLines) {
   const rows = statusLines.split('\n');
   const dateNormalized = splitRowsByDate(rows);
-  console.dir(dateNormalized);
   
   let relativeDateMap = {};
   const now = Date.now();
   for (const [key, val] of Object.entries(dateNormalized)) {
+    if (key == 'upTime') {
+      continue;
+    }
+
     const relDays = getRelativeDays(now, new Date(key).getTime());
     const avgQuartiles = getAverageQuartiles(val);
     
     relativeDateMap[relDays] = avgQuartiles;
   }
 
-  console.dir(relativeDateMap);
+  relativeDateMap.upTime = dateNormalized.upTime;
   return relativeDateMap;
 }
 
@@ -146,6 +181,7 @@ function getRelativeDays(date1, date2) {
 
 function splitRowsByDate(rows) {
   let dateValues = {};
+  let sum = 0, count = 0;
   for (var ii = 0; ii < rows.length; ii++) {
     const row = rows[ii];
     if (!row) {
@@ -166,9 +202,15 @@ function splitRowsByDate(rows) {
     if (resultStr.trim() == 'success') {
       result = 1;
     }
+    sum += result;
+    count++;
+
     const qk = getQuarterKey(dateTime);
     resultArray[qk].push(result);
   }
+
+  const upTime = (sum / count * 100).toFixed(2) + "%";
+  dateValues.upTime = upTime;
   return dateValues;
 }
 
@@ -179,8 +221,40 @@ function getQuarterKey(dateTime) {
   );
 }
 
-function showTooltip(event) {
-  
+function getQuartileText(quartile) {
+  switch (quartile) {
+    case 'q1':
+      return '00:00-06:00hrs';
+    case 'q2':
+      return '06:00-12:00hrs';
+    case 'q3':
+      return '12:00-18:00hrs';
+    case 'q4':
+      return '18:00-24:00hrs';
+    default:
+      return 'wut?'
+  }
+}
+
+let tooltipTimeout = null;
+function showTooltip(element, key, date, quartile, color) {
+  clearTimeout(tooltipTimeout);
+  const toolTipDiv = document.getElementById('tooltip');
+  document.getElementById('tooltipDateTime').innerText = date.toDateString();
+  document.getElementById('tooltipKey').innerText = key;
+  document.getElementById('tooltipQuartile').innerText = getQuartileText(quartile);
+  document.getElementById('tooltipStatus').innerText = getStatusDescriptiveText(color);
+  toolTipDiv.style.top = element.offsetTop + element.offsetHeight + 4;
+  toolTipDiv.style.left = element.offsetLeft + element.offsetWidth / 2 - toolTipDiv.offsetWidth / 2;
+  toolTipDiv.style.opacity = "1";
+}
+
+function hideTooltip() {
+  tooltipTimeout = setTimeout(() => 
+  {
+    const toolTipDiv = document.getElementById('tooltip');
+    toolTipDiv.style.opacity = "0";
+  }, 1000);  
 }
 
 async function genAllReports() {
@@ -194,6 +268,6 @@ async function genAllReports() {
       continue;
     }
 
-    await genReportLog(reportContainer, key, url);
+    await genReportLog(document.getElementById('reports'), key, url);
   }
 }

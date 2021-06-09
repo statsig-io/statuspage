@@ -13,13 +13,22 @@
       <hr class="titleSeparator" />
       <div id="reports" class="reportContainer">
       </div>
+      <div id="tooltip" class="tooltip" style="opacity: 0;">
+        <div id="tooltipArrow" class="tooltipArrow"> </div>
+        <div id="tooltipDateTime" class="tooltipDateTime"></div>
+        <div class="tooltipQuartile">
+          <span id="tooltipQuartile"></span> | <span id="tooltipKey"></span>
+        </div>
+        <div id="tooltipKey" class="tooltipKey"></div>
+        <div id="tooltipStatus" class="tooltipStatus"></div>
+        <div id="tooltipDescription" class="tooltipDescription"></div>
+      </div>
       <div id="templates" style="display: none;">
         <div 
           id="statusSquareTemplate" 
           class="statusSquare $color"
           data-status="$color"
-          title="$tooltip"
-          onmouseover="showTooltip(event)">
+          title="$tooltip">
         </div>
         <div id="statusLineTemplate" class="statusLine">
         </div>
