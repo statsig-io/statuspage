@@ -8,7 +8,7 @@ html {
   flex-direction: column;
 }
 body {
-  background-color: #ebebeb;
+  background-color: #194b7d;
   color: #3b3b3b;
   font-size: 14px;
   font-weight: 300;
@@ -16,7 +16,7 @@ body {
     "Helvetica Neue", "Ubuntu", sans-serif;
   justify-content: center;
   line-height: 22px;
-  margin: 60px 0;
+  margin: 0;
   padding: 0;
   text-align: center;
   transition: opacity 0.3s;
@@ -42,7 +42,7 @@ h1 {
   color: #3b3b3b;
   font-size: 40px;
   font-weight: bold;
-  margin-bottom: 0px;
+  margin: 0px;
 }
 h2 {
   color: #3b3b3b;
@@ -96,26 +96,50 @@ button {
   white-space: nowrap;
 }
 
+footer {
+  color: #e8e8e8;
+  margin-top: 40px;
+}
+
+footer a {
+  color: #fff;
+  font-weight: bold;
+}
+
+.pageContainer {
+  padding: 40px 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  max-width: 800px;
+  width: 100%;
+  margin: 40px auto;
+}
+
+.titleSeparator {
+  border: none;
+  border-top: 1px solid #eee;
+  margin-top: 30px;
+}
+
 .reportContainer {
-  max-width: 900px;
-  margin: 60px auto;
-  padding: 0 20px;
+  margin: 30px auto;
   width: 100%;
 }
 
 .statusContainer {
-  margin-top: 60px;
+  padding-top: 20px;
   text-align: left;
+}
+
+.statusContainer + .statusContainer {
+  border-top: 1px solid #eee;
+  margin-top: 40px;
 }
 
 .statusStreamContainer {
   background-color: #f8f8f8;
   display: flex;
   justify-content: space-between;
-}
-
-.statusStreamContainer + .statusStreamContainer {
-  margin-top: 40px;
 }
 
 .statusLine {
@@ -129,9 +153,35 @@ button {
 
 .statusSquare {
   min-width: 8px;
-  height: 8px;
+  height: 10px;
   margin: 1px;
   border: 1px solid #d8d8d8;
+}
+
+.sectionUrl {
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+.statusHeadline {
+  color: #eee;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.uptimeContainer {
+  color: #999;
+  display: flex;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.uptimeContainer hr {
+  border: none;
+  border-top: 1px dashed #eee;
+  width: 100%;
+  margin: 10px;
 }
 
 .success {
