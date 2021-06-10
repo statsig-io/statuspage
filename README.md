@@ -1,6 +1,9 @@
 # statuspage
 
-We tried various Status Pages out there, and built this as a fun little hobby project with the intention of making setting up status pages as simple as possible.  
+We tried various Status Pages out there, and built this as a fun little hobby project with the intention of making setting up status pages as simple as possible. 
+
+## Demo
+https://statsig-io.github.io/statuspage/
 
 ## Setup instructions
 
