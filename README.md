@@ -4,7 +4,7 @@ We tried various Status Pages out there, and built this as a fun little hobby pr
 
 ## Demo
 
-https://statsig-io.github.io/statuspage/
+https://status.statsig.com
 
 ## Setup instructions
 
