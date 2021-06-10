@@ -1,7 +1,7 @@
 KEYSARRAY=()
 URLSARRAY=()
 
-urlsConfig="./urls-config.txt"
+urlsConfig="./urls.cfg"
 while read -r line
 do
   echo "$line"

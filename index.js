@@ -1,19 +1,19 @@
 const maxDays = 30;
 
 async function genReportLog(container, key, url) {
-  const response = await fetch('logs/' + key + '_report.log');
-  let statusLines = '';
+  const response = await fetch("logs/" + key + "_report.log");
+  let statusLines = "";
   if (response.ok) {
     statusLines = await response.text();
   }
-  
+
   const normalized = normalizeData(statusLines);
   const statusStream = constructStatusStream(key, url, normalized);
   container.appendChild(statusStream);
 }
 
 function constructStatusStream(key, url, uptimeData) {
-  let streamContainer = templatize('statusStreamContainerTemplate');
+  let streamContainer = templatize("statusStreamContainerTemplate");
   for (var ii = maxDays - 1; ii >= 0; ii--) {
     let line = constructStatusLine(key, ii, uptimeData[ii]);
     streamContainer.appendChild(line);
@@ -21,15 +21,15 @@ function constructStatusStream(key, url, uptimeData) {
 
   const lastSet = uptimeData[0];
   const color = getColor(lastSet);
-  
-  const container = templatize('statusContainerTemplate', { 
-    title: key, 
-    url: url, 
-    color: color, 
+
+  const container = templatize("statusContainerTemplate", {
+    title: key,
+    url: url,
+    color: color,
     status: getStatusText(color),
     upTime: uptimeData.upTime,
   });
-  
+
   container.appendChild(streamContainer);
   return container;
 }
@@ -42,14 +42,18 @@ function constructStatusLine(key, relDay, upTimeArray) {
 }
 
 function getColor(uptimeVal) {
-  return uptimeVal == null ? 'nodata' : 
-    uptimeVal == 1 ? 'success' :
-    uptimeVal < 0.3 ? 'failure' : 'partial';
+  return uptimeVal == null
+    ? "nodata"
+    : uptimeVal == 1
+    ? "success"
+    : uptimeVal < 0.3
+    ? "failure"
+    : "partial";
 }
 
 function constructStatusSquare(key, date, uptimeVal) {
   const color = getColor(uptimeVal);
-  let square = templatize('statusSquareTemplate', {
+  let square = templatize("statusSquareTemplate", {
     color: color,
     tooltip: getTooltip(key, date, color),
   });
@@ -57,21 +61,21 @@ function constructStatusSquare(key, date, uptimeVal) {
   const show = () => {
     showTooltip(square, key, date, color);
   };
-  square.addEventListener('mouseover', show);
-  square.addEventListener('mousedown', show);
-  square.addEventListener('mouseout', hideTooltip);
-  return square;      
+  square.addEventListener("mouseover", show);
+  square.addEventListener("mousedown", show);
+  square.addEventListener("mouseout", hideTooltip);
+  return square;
 }
 
 let cloneId = 0;
 function templatize(templateId, parameters) {
   let clone = document.getElementById(templateId).cloneNode(true);
-  clone.id = 'template_clone_' + cloneId++;
+  clone.id = "template_clone_" + cloneId++;
   if (!parameters) {
     return clone;
   }
 
-  applyTemplateSubstitutions(clone, parameters);      
+  applyTemplateSubstitutions(clone, parameters);
   return clone;
 }
 
@@ -80,7 +84,7 @@ function applyTemplateSubstitutions(node, parameters) {
   for (var ii = 0; ii < attributes.length; ii++) {
     const attr = attributes[ii];
     const attrVal = node.getAttribute(attr);
-    node.setAttribute(attr, templatizeString(attrVal, parameters))
+    node.setAttribute(attr, templatizeString(attrVal, parameters));
   }
 
   if (node.childElementCount == 0) {
@@ -89,35 +93,45 @@ function applyTemplateSubstitutions(node, parameters) {
     const children = Array.from(node.children);
     children.forEach((n) => {
       applyTemplateSubstitutions(n, parameters);
-    })
+    });
   }
 }
 
 function templatizeString(text, parameters) {
   if (parameters) {
     for (const [key, val] of Object.entries(parameters)) {
-      text = text.replaceAll('$' + key, val);
+      text = text.replaceAll("$" + key, val);
     }
   }
   return text;
 }
 
 function getStatusText(color) {
-  return color == 'nodata' ? 'No Data Available' :
-    color == 'success' ? 'Operational' :
-    color == 'failure' ? 'Outage Detected' :
-    color == 'partial' ? 'Partial Outage' : 'Unknown';
+  return color == "nodata"
+    ? "No Data Available"
+    : color == "success"
+    ? "Fully Operational"
+    : color == "failure"
+    ? "Major Outage"
+    : color == "partial"
+    ? "Partial Outage"
+    : "Unknown";
 }
 
 function getStatusDescriptiveText(color) {
-  return color == 'nodata' ? 'No Data Available: Health check was not performed.' :
-    color == 'success' ? 'No downtime recorded today.' :
-    color == 'failure' ? 'Major outages recorded today.' :
-    color == 'partial' ? 'Partial outages recorded today.' : 'Unknown';
+  return color == "nodata"
+    ? "No Data Available: Health check was not performed."
+    : color == "success"
+    ? "No downtime recorded today."
+    : color == "failure"
+    ? "Major outages recorded today."
+    : color == "partial"
+    ? "Partial outages recorded today."
+    : "Unknown";
 }
 
 function getTooltip(key, date, quartile, color) {
-  let statusText = getStatusText(color);      
+  let statusText = getStatusText(color);
   return `${key} | ${date.toDateString()} : ${quartile} : ${statusText}`;
 }
 
@@ -128,13 +142,13 @@ function create(tag, className) {
 }
 
 function normalizeData(statusLines) {
-  const rows = statusLines.split('\n');
+  const rows = statusLines.split("\n");
   const dateNormalized = splitRowsByDate(rows);
-  
+
   let relativeDateMap = {};
   const now = Date.now();
   for (const [key, val] of Object.entries(dateNormalized)) {
-    if (key == 'upTime') {
+    if (key == "upTime") {
       continue;
     }
 
@@ -154,21 +168,22 @@ function getDayAverage(val) {
   }
 }
 
-function getRelativeDays(date1, date2) { 
+function getRelativeDays(date1, date2) {
   return Math.floor(Math.abs((date1 - date2) / (24 * 3600 * 1000)));
 }
 
 function splitRowsByDate(rows) {
   let dateValues = {};
-  let sum = 0, count = 0;
+  let sum = 0,
+    count = 0;
   for (var ii = 0; ii < rows.length; ii++) {
     const row = rows[ii];
     if (!row) {
       continue;
     }
 
-    const [dateTimeStr, resultStr] = row.split(',', 2);
-    const dateTime = new Date(dateTimeStr.replace(/-/g, '/'));
+    const [dateTimeStr, resultStr] = row.split(",", 2);
+    const dateTime = new Date(dateTimeStr.replace(/-/g, "/"));
     const dateStr = dateTime.toDateString();
 
     let resultArray = dateValues[dateStr];
@@ -181,7 +196,7 @@ function splitRowsByDate(rows) {
     }
 
     let result = 0;
-    if (resultStr.trim() == 'success') {
+    if (resultStr.trim() == "success") {
       result = 1;
     }
     sum += result;
@@ -190,7 +205,7 @@ function splitRowsByDate(rows) {
     resultArray.push(result);
   }
 
-  const upTime = count ? (sum / count * 100).toFixed(2) + "%" : '--%';
+  const upTime = count ? ((sum / count) * 100).toFixed(2) + "%" : "--%";
   dateValues.upTime = upTime;
   return dateValues;
 }
@@ -198,39 +213,40 @@ function splitRowsByDate(rows) {
 let tooltipTimeout = null;
 function showTooltip(element, key, date, color) {
   clearTimeout(tooltipTimeout);
-  const toolTipDiv = document.getElementById('tooltip');
-  
-  document.getElementById('tooltipDateTime').innerText = date.toDateString();
-  document.getElementById('tooltipDescription').innerText = getStatusDescriptiveText(color);
+  const toolTipDiv = document.getElementById("tooltip");
 
-  const statusDiv = document.getElementById('tooltipStatus');
+  document.getElementById("tooltipDateTime").innerText = date.toDateString();
+  document.getElementById("tooltipDescription").innerText =
+    getStatusDescriptiveText(color);
+
+  const statusDiv = document.getElementById("tooltipStatus");
   statusDiv.innerText = getStatusText(color);
   statusDiv.className = color;
-  
+
   toolTipDiv.style.top = element.offsetTop + element.offsetHeight + 10;
-  toolTipDiv.style.left = element.offsetLeft + element.offsetWidth / 2 - toolTipDiv.offsetWidth / 2;
+  toolTipDiv.style.left =
+    element.offsetLeft + element.offsetWidth / 2 - toolTipDiv.offsetWidth / 2;
   toolTipDiv.style.opacity = "1";
 }
 
 function hideTooltip() {
-  tooltipTimeout = setTimeout(() => 
-  {
-    const toolTipDiv = document.getElementById('tooltip');
+  tooltipTimeout = setTimeout(() => {
+    const toolTipDiv = document.getElementById("tooltip");
     toolTipDiv.style.opacity = "0";
-  }, 1000);  
+  }, 1000);
 }
 
 async function genAllReports() {
-  const response = await fetch('urls-config.txt');
+  const response = await fetch("urls.cfg");
   const configText = await response.text();
-  const configLines = configText.split('\n');
+  const configLines = configText.split("\n");
   for (let ii = 0; ii < configLines.length; ii++) {
     const configLine = configLines[ii];
-    const [key, url] = configLine.split('=');
+    const [key, url] = configLine.split("=");
     if (!key || !url) {
       continue;
     }
 
-    await genReportLog(document.getElementById('reports'), key, url);
+    await genReportLog(document.getElementById("reports"), key, url);
   }
 }

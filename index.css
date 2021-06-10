@@ -72,7 +72,7 @@ h5 {
 }
 h6 {
   color: #3b3b3b;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   margin-top: 5px;
   margin-bottom: 4px;
@@ -167,7 +167,6 @@ footer a {
 
 .sectionUrl {
   font-size: 14px;
-  margin-left: 20px;
 }
 
 .statusTitle {
@@ -178,7 +177,14 @@ footer a {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 2px;
+}
+
+.statusSubtitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 4px;
 }
 
 .statusHeadline {
@@ -296,7 +302,8 @@ footer a {
     margin: 0 auto 40px auto;
   }
 
-  .statusHeader {
+  .statusHeader,
+  .statusSubtitle {
     display: block;
   }
 
