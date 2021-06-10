@@ -289,3 +289,36 @@ footer a {
   border-top: 1px solid #ededed;
   margin-top: 16px;
 }
+
+@media screen and (max-width: 800px) {
+  .pageContainer {
+    padding: 30px 20px;
+    margin: 0 auto 40px auto;
+  }
+
+  .statusHeader {
+    display: block;
+  }
+
+  .statusHeadline,
+  .sectionUrl,
+  .statusUptime {
+    margin-left: 0;
+    margin-top: 8px;
+    text-align: left;
+  }
+
+  .statusTitle,
+  .statusHeadline {
+    display: inline-block;
+  }
+
+  .statusSquare + .statusSquare {
+    margin-left: 1px;
+  }
+
+  .statusSquare {
+    min-width: 4px;
+    width: 100%;
+  }
+}
