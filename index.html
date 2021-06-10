@@ -7,20 +7,19 @@
   </head>
   <body>
     <div class="pageContainer">
-      <h1>
-        Statsig Status
-      </h1>
-      <hr class="titleSeparator" />
+      <div class="headline">
+        <img src="/logo.svg" alt="Logo" width="200px" />
+        <span>
+          System Status
+        </span>
+      </div>
       <div id="reports" class="reportContainer">
       </div>
       <div id="tooltip" class="tooltip" style="opacity: 0;">
         <div id="tooltipArrow" class="tooltipArrow"> </div>
-        <div class="tooltipDateTime">
-          <span id="tooltipDateTime"></span> | <span id="tooltipQuartile"></span> 
-        </div>
-        <div id="tooltipKey" class="tooltipKey">
-        </div>
+        <div id="tooltipDateTime" class="tooltipDateTime"></div>
         <div id="tooltipStatus" class="tooltipStatus"></div>
+        <hr />
         <div id="tooltipDescription" class="tooltipDescription"></div>
       </div>
       <div id="templates" style="display: none;">
@@ -34,21 +33,18 @@
         <div id="statusStreamContainerTemplate" class="statusStreamContainer">
         </div>
         <div id="statusContainerTemplate" class="statusContainer">
-          <h4><span>$title </span><span class="$color statusHeadline">$status</span></h4>
-          <div class="sectionUrl">
-            (<a href="$url">$url</a>)
+          <div class="statusHeader">
+            <h6 class="statusTitle">$title&nbsp;</h6>
+            <span class="$color statusHeadline">$status</span> 
+            <span class="sectionUrl"><a href="$url">$url</a></span>
+            <span class="statusUptime">$upTime in the last 30 days</span>
           </div>
-        </div>
-        <div id="uptimeTemplate" class="uptimeContainer">
-          <span><b>Uptime:&nbsp;</b></span>
-          <span>$upTime</span>
-          <hr />
         </div>
       </div>
     </div>
     <footer>
       Powered by Statsig Open Source Library: 
-      <a href="https://github.com/statsig-io/pinger/">https://github.com/statsig-io/pinger</a>
+      <a href="https://github.com/statsig-io/statuspage/">https://github.com/statsig-io/statuspage</a>
     </footer>
   </body>
   <script>
