@@ -19,6 +19,7 @@ echo $URLSARRAY
 echo ${#KEYSARRAY[@]}
 echo "***********************"
 
+mkdir -p logs
 
 for (( index=0; index < ${#KEYSARRAY[@]}; index++))
 do
@@ -42,7 +43,7 @@ do
     sleep 5
   done
   dateTime=$(date +'%Y-%m-%d %H:%M')
-  echo $dateTime, $result >> "${key}_report.log"
+  echo $dateTime, $result >> "logs/${key}_report.log"
 done
 
 git config --global user.name 'Vijaye Raji'
