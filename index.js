@@ -2,11 +2,10 @@ const maxDays = 30;
 
 async function genReportLog(container, key, url) {
   const response = await fetch(key + '_report.log');
-  if (!response.ok) {
-    return;
+  let statusLines = '';
+  if (response.ok) {
+    statusLines = await response.text();
   }
-  
-  const statusLines = await response.text();
   
   const normalized = normalizeData(statusLines);
   const statusStream = constructStatusStream(key, url, normalized);
@@ -191,7 +190,7 @@ function splitRowsByDate(rows) {
     resultArray.push(result);
   }
 
-  const upTime = (sum / count * 100).toFixed(2) + "%";
+  const upTime = count ? (sum / count * 100).toFixed(2) + "%" : '--%';
   dateValues.upTime = upTime;
   return dateValues;
 }
