@@ -8,22 +8,22 @@ https://statsig-io.github.io/statuspage/
 
 ## Setup instructions
 
-1. Fork this repository on github
-2. Update `urls.cfg` to include your urls
+1. Fork this repository.
+2. Update `urls.cfg` to include your urls.
 
 ```cfg
 key1=https://example.com
 key2=https://statsig.com
 ```
 
-3. Update `index.html` and change the title
+3. Update `index.html` and change the title.
 
 ```html
 <title>My Status Page</title>
 <h1>Services Status</h1>
 ```
 
-4. Set up Pages on your github
+4. Set up Pages on your github.
 
 ![image](https://user-images.githubusercontent.com/74588208/121419015-5f4dc200-c920-11eb-9b14-a275ef5e2a19.png)
 
@@ -33,12 +33,12 @@ This project uses Github actions to wake up every hour and run a shell script (`
 
 ## What does it not do (yet)?
 
-1. Incident management
-2. Outage duration tracking
-3. Updating status root-cause
+1. Incident management.
+2. Outage duration tracking.
+3. Updating status root-cause.
 
 ## Got new ideas?
 
-Send in a PR - we'd love to integrate your ideas
+Send in a PR - we'd love to integrate your ideas.
 
 ![Screen Shot 2021-06-10 at 1 25 43 AM](https://user-images.githubusercontent.com/74588208/121491467-d455e180-c98a-11eb-8514-73e6707737c4.png)
