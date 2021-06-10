@@ -108,9 +108,9 @@ function getStatusText(color) {
 
 function getStatusDescriptiveText(color) {
   return color == 'nodata' ? 'No Data Available: Health check was not performed.' :
-    color == 'success' ? 'All systems 100% operational.' :
-    color == 'failure' ? 'The system was down as seen from health-checker during this period.' :
-    color == 'partial' ? 'There were some periods of instability in the service.' : 'Unknown';
+    color == 'success' ? 'No downtime recorded today.' :
+    color == 'failure' ? 'Major outages recorded today.' :
+    color == 'partial' ? 'Partial outages recorded today.' : 'Unknown';
 }
 
 function getTooltip(key, date, quartile, color) {
@@ -193,13 +193,18 @@ function splitRowsByDate(rows) {
 }
 
 let tooltipTimeout = null;
-function showTooltip(element, key, date, quartile, color) {
+function showTooltip(element, key, date, color) {
   clearTimeout(tooltipTimeout);
   const toolTipDiv = document.getElementById('tooltip');
+  
   document.getElementById('tooltipDateTime').innerText = date.toDateString();
-  document.getElementById('tooltipKey').innerText = key;
-  document.getElementById('tooltipStatus').innerText = getStatusDescriptiveText(color);
-  toolTipDiv.style.top = element.offsetTop + element.offsetHeight + 4;
+  document.getElementById('tooltipDescription').innerText = getStatusDescriptiveText(color);
+
+  const statusDiv = document.getElementById('tooltipStatus');
+  statusDiv.innerText = getStatusText(color);
+  statusDiv.className = color;
+  
+  toolTipDiv.style.top = element.offsetTop + element.offsetHeight + 10;
   toolTipDiv.style.left = element.offsetLeft + element.offsetWidth / 2 - toolTipDiv.offsetWidth / 2;
   toolTipDiv.style.opacity = "1";
 }

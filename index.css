@@ -115,10 +115,20 @@ footer a {
   margin: 96px auto;
 }
 
-.titleSeparator {
-  border: none;
-  border-top: 1px solid #eee;
-  margin-top: 30px;
+.headline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headline span {
+  background-color: #f5f6f8;
+  border-radius: 5px;
+  padding: 6px;
+  margin-left: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .reportContainer {
@@ -142,7 +152,6 @@ footer a {
 .statusStreamContainer {
   display: flex;
   justify-content: space-between;
-  margin: 16px 0;
 }
 
 .statusSquare {
@@ -169,6 +178,7 @@ footer a {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 16px;
 }
 
 .statusHeadline {
@@ -176,6 +186,7 @@ footer a {
   padding: 4px 8px;
   border-radius: 15px;
   font-size: 12px;
+  font-weight: 700;
   margin-left: 12px;
 }
 
@@ -221,13 +232,13 @@ footer a {
 }
 
 .tooltip {
-  background-color: #194b7dee;
-  box-shadow: 0 0 8px 0 #33333366;
+  background-color: #fff;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.12);
   border-radius: 4px;
-  color: #fff;
+  color: #3b3b3b;
   font-size: 12px;
   line-height: 18px;
-  padding: 8px;
+  padding: 16px;
   position: absolute;
   text-align: left;
   z-index: 100;
@@ -241,17 +252,40 @@ footer a {
   width: 4px;
   text-align: center;
   border: 4px solid transparent;
-  border-bottom-color: #194b7d;
+  border-bottom-color: #fff;
   left: 50%;
   margin-left: -2px;
 }
 
 .tooltip .tooltipDateTime {
   font-size: 12px;
-  font-weight: bold;
+  color: #7c7c7c;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 
 .tooltip .tooltipKey {
   color: #ccc;
   font-size: 10px;
+}
+
+.tooltip .tooltipDescription {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #181818;
+}
+
+.tooltip #tooltipStatus {
+  padding: 4px 8px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 6px;
+  display: inline-block;
+}
+
+.tooltip hr {
+  border: none;
+  border-top: 1px solid #ededed;
+  margin-top: 16px;
 }
