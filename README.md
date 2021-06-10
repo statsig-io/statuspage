@@ -34,5 +34,6 @@ This project uses Github actions to wake up every hour and run a shell script (h
 ## Got new ideas?
 Send in a PR - we'd love to integrate your ideas
 
-![Screen Shot 2021-06-09 at 12 34 19 PM](https://user-images.githubusercontent.com/74588208/121417749-15b0a780-c91f-11eb-9c84-025cf5f5a3d4.png)
+![Screen Shot 2021-06-10 at 1 25 43 AM](https://user-images.githubusercontent.com/74588208/121491467-d455e180-c98a-11eb-8514-73e6707737c4.png)
+
 
