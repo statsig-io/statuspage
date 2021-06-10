@@ -8,7 +8,7 @@ html {
   flex-direction: column;
 }
 body {
-  background-color: #194b7d;
+  background-color: #f5f6f8;
   color: #3b3b3b;
   font-size: 14px;
   font-weight: 300;
@@ -71,7 +71,7 @@ h5 {
   margin-bottom: 4px;
 }
 h6 {
-  color: #194b7d;
+  color: #3b3b3b;
   font-size: 14px;
   font-weight: bold;
   margin-top: 5px;
@@ -97,22 +97,22 @@ button {
 }
 
 footer {
-  color: #e8e8e8;
+  color: #9c9c9c;
   margin: 40px;
 }
 
 footer a {
-  color: #fff;
   font-weight: bold;
 }
 
 .pageContainer {
-  padding: 40px 20px;
+  padding: 30px 50px;
   background-color: #fff;
-  border-radius: 2px;
-  max-width: 800px;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.06);
+  border-radius: 5px;
+  max-width: 900px;
   width: 100%;
-  margin: auto;
+  margin: 96px auto;
 }
 
 .titleSeparator {
@@ -127,45 +127,62 @@ footer a {
 }
 
 .statusContainer {
+  border: 1px solid #ededed;
+  border-radius: 5px;
   padding-top: 20px;
   text-align: left;
+  padding: 24px;
 }
 
 .statusContainer + .statusContainer {
   border-top: 1px solid #eee;
-  margin-top: 40px;
+  margin-top: 30px;
 }
 
 .statusStreamContainer {
   display: flex;
   justify-content: space-between;
+  margin: 16px 0;
 }
 
-.statusLine {
-  display: flex;
-  min-height: 36px;
-  flex-direction: column;
-  justify-content: space-between;
+.statusSquare {
+  border-radius: 3px;
+  height: 30px;
   min-width: 8px;
   width: 100%;
 }
 
-.statusSquare {
-  min-width: 8px;
-  height: 10px;
-  margin: 1px;
-  border: 1px solid #d8d8d8;
+.statusSquare + .statusSquare {
+  margin-left: 6px;
 }
 
 .sectionUrl {
-  font-size: 12px;
-  margin-bottom: 20px;
+  font-size: 14px;
+  margin-left: 20px;
+}
+
+.statusTitle {
+  text-transform: uppercase;
+}
+
+.statusHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .statusHeadline {
   color: #eee;
   padding: 4px 8px;
-  border-radius: 8px;
+  border-radius: 15px;
+  font-size: 12px;
+  margin-left: 12px;
+}
+
+.statusUptime {
+  flex: 1;
+  text-align: right;
+  color: #7c7c7c;
   font-size: 12px;
 }
 
@@ -184,12 +201,12 @@ footer a {
 }
 
 .success {
-  background-color: #00c29c;
+  background-color: #4cae50;
   color: #fff;
 }
 
 .failure {
-  background-color: #e75d33;
+  background-color: #f44336;
   color: #fff;
 }
 
@@ -199,7 +216,7 @@ footer a {
 }
 
 .partial {
-  background-color: #e2c51c;
+  background-color: #ff9800;
   color: #fff;
 }
 

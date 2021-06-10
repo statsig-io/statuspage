@@ -10,7 +10,6 @@
       <h1>
         Statsig Status
       </h1>
-      <hr class="titleSeparator" />
       <div id="reports" class="reportContainer">
       </div>
       <div id="tooltip" class="tooltip" style="opacity: 0;">
@@ -34,15 +33,12 @@
         <div id="statusStreamContainerTemplate" class="statusStreamContainer">
         </div>
         <div id="statusContainerTemplate" class="statusContainer">
-          <h4><span>$title </span><span class="$color statusHeadline">$status</span></h4>
-          <div class="sectionUrl">
-            (<a href="$url">$url</a>)
+          <div class="statusHeader">
+            <h6 class="statusTitle">$title&nbsp;</h6>
+            <span class="$color statusHeadline">$status</span> 
+            <span class="sectionUrl"><a href="$url">$url</a></span>
+            <span class="statusUptime">$upTime in the last 30 days</span>
           </div>
-        </div>
-        <div id="uptimeTemplate" class="uptimeContainer">
-          <span><b>Uptime:&nbsp;</b></span>
-          <span>$upTime</span>
-          <hr />
         </div>
       </div>
     </div>
