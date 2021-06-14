@@ -4,7 +4,8 @@ We tried various Status Pages out there, and built this as a fun little hobby pr
 
 ## Demo
 
-https://status.statsig.com
+* https://status.statsig.com
+* Live view of this repo: https://statsig-io.github.io/statuspage/
 
 ## Setup instructions
 
@@ -40,5 +41,9 @@ This project uses Github actions to wake up every hour and run a shell script (`
 ## Got new ideas?
 
 Send in a PR - we'd love to integrate your ideas.
+
+## In case...
+
+You are looking for a developer friendly Feature flags, and A/B experimentation service for your product, checkout: https://www.statsig.com
 
 ![Screen Shot 2021-06-10 at 1 25 43 AM](https://user-images.githubusercontent.com/74588208/121491467-d455e180-c98a-11eb-8514-73e6707737c4.png)
