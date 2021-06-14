@@ -184,7 +184,7 @@ footer a {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 4px;
+  margin-bottom: 12px;
 }
 
 .statusHeadline {
