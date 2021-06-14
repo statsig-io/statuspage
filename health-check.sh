@@ -48,7 +48,7 @@ done
 
 git config --global user.name 'Vijaye Raji'
 git config --global user.email 'vijaye@statsig.com'
-git add -A
+git add -A --force logs/
 git commit -am 'Status logs - automated'
 git push
 
