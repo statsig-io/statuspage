@@ -10,7 +10,7 @@ We tried various Status Pages out there, and built this as a fun little hobby pr
 
 ## Setup instructions
 
-1. Fork this repository.
+1. Fork the [template repository](https://github.com/statsig-io/statuspage/).
 2. Update `urls.cfg` to include your urls.
 
 ```cfg
