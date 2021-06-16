@@ -3,7 +3,7 @@
 # later upstream merges messy for anyone who forked us.
 commit=true
 origin=$(git remote get-url origin)
-if [[ $origin == *statsig-io/statuspage ]]
+if [[ $origin == *statsig-io/statuspage* ]]
 then
   commit=false
 fi
@@ -12,21 +12,17 @@ KEYSARRAY=()
 URLSARRAY=()
 
 urlsConfig="./urls.cfg"
+echo "Reading $urlsConfig"
 while read -r line
 do
-  echo "$line"
+  echo "  $line"
   IFS='=' read -ra TOKENS <<< "$line"
-  echo $TOKENS
-
   KEYSARRAY+=(${TOKENS[0]})
   URLSARRAY+=(${TOKENS[1]})
 done < "$urlsConfig"
 
 echo "***********************"
-echo $KEYSARRAY
-echo $URLSARRAY
-echo ${#KEYSARRAY[@]}
-echo "***********************"
+echo "Starting health checks with ${#KEYSARRAY[@]} configs:"
 
 mkdir -p logs
 
@@ -34,9 +30,7 @@ for (( index=0; index < ${#KEYSARRAY[@]}; index++))
 do
   key="${KEYSARRAY[index]}"
   url="${URLSARRAY[index]}"
-
-  echo $key
-  echo $url
+  echo "  $key=$url"
 
   for i in 1 2 3 4; 
   do
@@ -56,7 +50,7 @@ do
   then
     echo $dateTime, $result >> "logs/${key}_report.log"
   else
-    echo $dateTime, $result
+    echo "    $dateTime, $result"
   fi
 done
 
