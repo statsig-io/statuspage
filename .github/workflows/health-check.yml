@@ -2,9 +2,6 @@ name: Scheduled Health Check
 
 # Controls when the action will run.
 on:
-  pull_request:
-    branches:
-      - main
   schedule:
     - cron: "30 * * * *"
 
