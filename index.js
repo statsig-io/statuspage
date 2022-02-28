@@ -122,11 +122,11 @@ function getStatusDescriptiveText(color) {
   return color == "nodata"
     ? "No Data Available: Health check was not performed."
     : color == "success"
-    ? "No downtime recorded today."
+    ? "No downtime recorded on this day."
     : color == "failure"
-    ? "Major outages recorded today."
+    ? "Major outages recorded on this day."
     : color == "partial"
-    ? "Partial outages recorded today."
+    ? "Partial outages recorded on this day."
     : "Unknown";
 }
 
@@ -183,7 +183,7 @@ function splitRowsByDate(rows) {
     }
 
     const [dateTimeStr, resultStr] = row.split(",", 2);
-    const dateTime = new Date(Date.parse(dateTimeStr + " GMT"));
+    const dateTime = new Date(Date.parse(dateTimeStr.replace(/-/g, "/") + " GMT"));
     const dateStr = dateTime.toDateString();
 
     let resultArray = dateValues[dateStr];
