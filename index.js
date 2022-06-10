@@ -252,10 +252,10 @@ async function genAllReports() {
 }
 
 async function genIncidentReport() {
-  const response = await fetch("incident_report.md");
+  const response = await fetch("incident_report.json");
   if (response.ok) {
-    const markdown = await response.text();
-    const htmlDom = DOMPurify.sanitize(marked.parse(markdown));
+    const json = await response.json();
+    const htmlDom = DOMPurify.sanitize(marked.parse(json.contents));
     document.getElementById('incidentReport').innerHTML = htmlDom;
   } 
 }
