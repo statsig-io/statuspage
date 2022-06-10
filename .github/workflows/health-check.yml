@@ -9,6 +9,12 @@ jobs:
   health_check_job:
     runs-on: ubuntu-latest
     name: Check all sites
+    env:
+      USERNAME: ${{secrets.USERNAME}}
+      PASSWORD: ${{secrets.PASSWORD}}
+      MAILFROM: ${{secrets.MAILFROM}}
+      MAILRCPT: ${{secrets.MAILRCPT}}
+      SMTPS: ${{secrets.SMTPS}}
     steps:
       - uses: actions/checkout@v2
       - name: Run Shell Script
