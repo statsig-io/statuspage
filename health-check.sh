@@ -1,6 +1,14 @@
 # In the original repository we'll just print the result of status checks,
 # without committing. This avoids generating several commits that would make
 # later upstream merges messy for anyone who forked us.
+date=$(date +'%a, %d %b %Y %X')
+
+#USERNAME='anygmailorsmtpsupportedemail@gmail.com'
+#PASSWORD='yoursupersecretpassword'
+#MAILFROM='no-reply@statsig.io'
+#MAILRCPT='personalemail@gmail.com'
+#SMTPS='smtp.gmail.com:465'
+
 commit=true
 origin=$(git remote get-url origin)
 if [[ $origin == *statsig-io/statuspage* ]]
