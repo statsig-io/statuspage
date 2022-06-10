@@ -250,3 +250,12 @@ async function genAllReports() {
     await genReportLog(document.getElementById("reports"), key, url);
   }
 }
+
+async function genIncidentReport() {
+  const response = await fetch("incident_report.md");
+  if (response.ok) {
+    const markdown = await response.text();
+    const htmlDom = DOMPurify.sanitize(marked.parse(markdown));
+    document.getElementById('incidentReport').innerHTML = htmlDom;
+  } 
+}
