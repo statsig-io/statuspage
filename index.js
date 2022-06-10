@@ -182,8 +182,9 @@ function splitRowsByDate(rows) {
       continue;
     }
 
-    const [dateTimeStr, resultStr] = row.split(",", 2);
-    const dateTime = new Date(Date.parse(dateTimeStr.replace(/-/g, "/") + " GMT"));
+    const [dateTimeStr, resultStr] = row.split(',', 2);
+    // Replace '-' with '/' because Safari
+    const dateTime = new Date(Date.parse(dateTimeStr.replaceAll('-', '/') + ' GMT'));
     const dateStr = dateTime.toDateString();
 
     let resultArray = dateValues[dateStr];
