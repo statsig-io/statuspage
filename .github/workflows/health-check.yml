@@ -8,8 +8,6 @@ on:
 jobs:
   health_check_job:
     runs-on: ubuntu-latest
-    branches:
-      - main
     name: Check all sites
     steps:
       - uses: actions/checkout@v2
