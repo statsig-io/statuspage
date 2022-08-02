@@ -14,3 +14,4 @@ jobs:
       - name: Run Shell Script
         id: shell_script_run
         run: bash ./health-check.sh
+    workflow_dispatch:
