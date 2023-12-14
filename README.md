@@ -1,14 +1,4 @@
-[![Health Check](../../actions/workflows/health-check.yml/badge.svg)](../../actions/workflows/health-check.yml)
 
-# Statsig's Open-Source Status Page
-
-We tried various Status Pages out there, and built this as a fun little hobby project to make status pages as simple as possible.
-
-## Demo
-
-- https://status.statsig.com
-
-## Setup instructions
 
 1. Fork the [template repository](https://github.com/statsig-io/statuspage/).
 2. Update `urls.cfg` to include your urls.
