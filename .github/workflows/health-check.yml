@@ -7,7 +7,7 @@ on:
 
 jobs:
   health_check_job:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     name: Check all sites
     steps:
       - uses: actions/checkout@v2
